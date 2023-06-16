@@ -23,6 +23,30 @@
       "category": "Estudos",
       "price": 2500,
       "createdAt": "2023-06-04T19:53:35.359Z"
+    },
+    {
+      "description": "Desenvolvimento de App",
+      "price": 10000,
+      "category": "Venda",
+      "type": "income",
+      "createdAt": "2023-06-16T14:51:47.739Z",
+      "id": 4
+    },
+    {
+      "description": "Pastel",
+      "price": 5,
+      "category": "Comida",
+      "type": "outcome",
+      "createdAt": "2023-06-16T14:56:03.647Z",
+      "id": 5
+    },
+    {
+      "description": "Iogurte de banana",
+      "price": 4,
+      "category": "Comida",
+      "type": "outcome",
+      "createdAt": "2023-06-16T15:05:50.337Z",
+      "id": 6
     }
   ]
 }
