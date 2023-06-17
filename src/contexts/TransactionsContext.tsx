@@ -72,7 +72,7 @@ export function TransactionsProvider ({children}: TransactionsProviderProps) {
 
     useEffect(() => {
       fetchTransactions()
-    }, [])
+    }, [fetchTransactions])
   
     // useEffect(() => {
     // fetch('http://localhost:3333/transactions')

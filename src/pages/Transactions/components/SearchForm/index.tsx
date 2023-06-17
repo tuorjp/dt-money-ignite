@@ -23,6 +23,9 @@ O memo é usado para memorizar um componente:
 0 Antes do fluxo de renderização: Hooks changed, Props changed ? (deep comparison)
 01 Compara com a versão anterior dos hooks e props
 02 Se mudou algo, cai para o fluxo de recriação
+
+O memo se faz necessário quando existe um componente gigante, com muito html.
+Se esse não for o caso, geralmente nem compensa utilizá-lo.
 */
 
 const searchFormSchema = z.object({
