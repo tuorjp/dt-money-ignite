@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState, useCallback } from 'react'
 import { api } from '../lib/axios'
 import { createContext } from 'use-context-selector'
 
@@ -32,9 +32,10 @@ interface TransactionsProviderProps {
 export const TransactionsContext = createContext({} as TransactionsContextType)
 
 export function TransactionsProvider ({children}: TransactionsProviderProps) {
-    const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [transactions, setTransactions] = useState<Transaction[]>([])
 
-    async function fetchTransactions(query?:string) {
+   const fetchTransactions = useCallback(
+    async(query?:string) => {
       // a api já guarda a url base, basta passar a rota com ou sem barra e os parâmetros da busca
       // no caso do json-server o parâmetro que vai na url se chama q
       const response = await api.get('/transactions', {
@@ -46,36 +47,42 @@ export function TransactionsProvider ({children}: TransactionsProviderProps) {
       })
 
         setTransactions(response.data)
-      }
-    
-      async function createTransaction(data: CreateTransactionInput) {
-    // basta passar a rota e o corpo da requisição
-        const {description, price, category, type} = data
-        
-        const response = await api.post('transactions', {
-          description,
-          price,
-          category,
-          type,
-          createdAt: new Date(),
-        })
-
-        setTransactions(state => [response.data, ...state])
-      }
-
-      useEffect(() => {
-        fetchTransactions()
-      }, [])
-    
-      // useEffect(() => {
-      // fetch('http://localhost:3333/transactions')
-      //  .then(response => response.json())
-      //  .then(data => console.log(data))
-      // }, [])
+      },
+      [],
+   )
       
-    return(
-        <TransactionsContext.Provider value={{transactions, fetchTransactions, createTransaction}}>
-            {children}
-        </TransactionsContext.Provider>
+    // esse hook evita que essa função seja recriada em memória desnecessariamente, as dependências devem ser passadas no array
+    const createTransaction = useCallback(
+      async(data: CreateTransactionInput) => {
+      // basta passar a rota e o corpo da requisição
+          const {description, price, category, type} = data
+          
+          const response = await api.post('transactions', {
+            description,
+            price,
+            category,
+            type,
+            createdAt: new Date(),
+          })
+  
+          setTransactions(state => [response.data, ...state])
+        },
+        [],
     )
+
+    useEffect(() => {
+      fetchTransactions()
+    }, [])
+  
+    // useEffect(() => {
+    // fetch('http://localhost:3333/transactions')
+    //  .then(response => response.json())
+    //  .then(data => console.log(data))
+    // }, [])
+    
+  return(
+      <TransactionsContext.Provider value={{transactions, fetchTransactions, createTransaction}}>
+          {children}
+      </TransactionsContext.Provider>
+  )
 }
